@@ -2,6 +2,9 @@
   "name": "simple-tracker",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun run --watch index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -10,7 +13,6 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.0.2",
-    "elysia": "^1.0.20",
-    "outdent": "^0.8.0"
+    "elysia": "^1.0.20"
   }
 }
