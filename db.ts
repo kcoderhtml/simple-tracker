@@ -1,11 +1,12 @@
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";
 
-import { sqliteTable, text, integer, SQLiteTable } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const tracked = sqliteTable("tracked", {
     id: integer("id").primaryKey(),
     trackerId: text("trackerId"),
+    timestamp: integer("timestamp"),
     type: text("type"),
     host: text("host"),
     pathname: text("pathname"),
@@ -23,6 +24,7 @@ export async function getDatabase() {
         CREATE TABLE IF NOT EXISTS tracked (
             id INTEGER PRIMARY KEY,
             trackerId TEXT,
+            timestamp INTEGER,
             type TEXT,
             host TEXT,
             pathname TEXT,

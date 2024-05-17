@@ -28,6 +28,7 @@ type IPInfo = {
 
 type TrackedData = {
     trackerId: string;
+    timestamp: number;
     type: string;
     host: string;
     pathname: string;
@@ -54,6 +55,7 @@ async function track(request: Request, id?: string) {
 
     const trackedData: TrackedData = {
         trackerId: id || "",
+        timestamp: Date.now(),
         type,
         host,
         pathname,
