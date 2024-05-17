@@ -1,6 +1,8 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 
+import { getDatabase, tracked } from "./db";
+
 const transparentPngBuffer = Buffer.from(
     "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c489000000017352474200aece1ce90000000b494441541857636000020000050001aad5c8510000000049454e44ae426082",
     "hex",
@@ -25,13 +27,13 @@ type IPInfo = {
 };
 
 type TrackedData = {
-    id: string | undefined;
+    trackerId: string;
     type: string;
     host: string;
     pathname: string;
     user_agent: string;
     ip: string;
-    ip_info: IPInfo;
+    ip_info: string;
 };
 
 async function track(request: Request, id?: string) {
@@ -51,17 +53,23 @@ async function track(request: Request, id?: string) {
     const ip_info_json = (await ip_info.json()) as IPInfo;
 
     const trackedData: TrackedData = {
-        id,
+        trackerId: id || "",
         type,
         host,
         pathname,
         user_agent,
         ip,
-        ip_info: ip_info_json,
+        ip_info: JSON.stringify(ip_info_json),
     };
 
-    console.log(trackedData);
+    console.log(`Hit from ${ip === "" ? "localhost" : ip} (${ip_info_json.country})`)
+    await db.insert(tracked).values(trackedData);
 }
+
+console.log("🚀 Elysia is starting...")
+console.log("🔗 Database is connecting...")
+const db = await getDatabase();
+console.log("🔗 Database is ready!")
 
 const app = new Elysia();
 app.use(
@@ -99,6 +107,15 @@ app
         return new Response(transparentPngBuffer, {
             headers: {
                 "content-type": "image/png",
+            },
+        });
+    })
+    .get("/data", async () => {
+        const data = await db.select().from(tracked).all();
+
+        return new Response(JSON.stringify(data), {
+            headers: {
+                "content-type": "application/json",
             },
         });
     })
