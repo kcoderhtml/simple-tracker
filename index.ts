@@ -34,14 +34,6 @@ type TrackedData = {
     ip_info: IPInfo;
 };
 
-const app = new Elysia();
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST"],
-    }),
-);
-
 async function track(request: Request, id?: string) {
     const referrer = request.headers.get("referer");
     const { host, pathname } = referrer
@@ -70,6 +62,14 @@ async function track(request: Request, id?: string) {
 
     console.log(trackedData);
 }
+
+const app = new Elysia();
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST"],
+    }),
+);
 
 app
     .get("/", async ({ request }) => {
