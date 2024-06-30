@@ -64,7 +64,7 @@ async function track(request: Request, id?: string) {
         ip_info: JSON.stringify(ip_info_json),
     };
 
-    console.log(`Hit from ${ip === "" ? "localhost" : ip} (${ip_info_json.country})`)
+    console.log(`${new Date().toLocaleString()} - Hit from ${ip === "" ? "localhost" : ip} (${ip_info_json.country}, ${ip_info_json.city}) id ${id || ""} from ${user_agent}`)
     await db.insert(tracked).values(trackedData);
 }
 
