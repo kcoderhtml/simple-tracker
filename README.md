@@ -1,5 +1,7 @@
 # simple-tracker
 
+A simple pixel tracker that tracks the number of times a user has visited a page and logs all the data
+
 To install dependencies:
 
 ```bash
